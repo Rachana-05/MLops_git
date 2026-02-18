@@ -1,12 +1,19 @@
-name: Run Deep Learning Classification Script
+name: Run ML Scripts
 
 on:
-  push:                # Runs whenever you push code
-  workflow_dispatch:   # Allows manual trigger from Actions tab
+  push:
+  workflow_dispatch:
 
 jobs:
-  run-script:
+  run-scripts:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        script:
+          - decisiontree.py
+          - deeplearning_classification.py
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,5 +28,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy pandas matplotlib scikit-learn tensorflow keras
 
-      - name: Run Deep Learning Classification script
-        run: python deeplearning_classification.py
+      - name: Run script
+        run: python ${{ matrix.script }}
